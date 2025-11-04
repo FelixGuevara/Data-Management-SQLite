@@ -4,12 +4,12 @@ The Wildlife Animal Tracking System (WATS)
 
 ## 📘 Project Overview
 
-The Wildlife Animal Tracking System (WATS) is a JFC/Swing-based Java GUI application developed by Felix Guevara, designed to help researchers and conservationists manage wildlife animal data efficiently. It allows users to manually enter animal records, upload data from CSV files, and perform various operations such as updating, deleting, and analyzing animal information.
+The Wildlife Animal Tracking System (WATS) is a JFC/Swing-based Java GUI application developed by Felix Guevara, designed to help researchers and conservationists manage wildlife animal data efficiently. It allows users to manually enter animal records, upload data from SQLite database files, and perform various operations such as updating, deleting, and analyzing animal information.
 
 ## ✨ Features
 
--  Add animal records manually via 
--	Upload animal data from CSV files
+-  Add animal records manually  
+-	Upload animal data from SQLite database files
 -	Display all animal records
 -	Update and delete animal records
 -	Calculate average weight by species
@@ -28,14 +28,14 @@ The Wildlife Animal Tracking System (WATS) is a JFC/Swing-based Java GUI applica
 1. Open IntelliJ IDEA 2025.
 2. Create a new Java project or import the existing source files:
    - `WildAnimal.java`
-   - `AnimalManager.java`
+   - `DatabaseManager.java`
    - `WATSSwingApp.java`
    - `WATSMainFrame.java`
    - `AddAnimalDialog.java`
    - `UpdateAnimalDialog.java`
    - `NumericDocumentFilter.java`
    - `DecimalDocumentFilter.java`
-   - `AverageWeightChart.java`
+   - `DatabaseFileChooser.java`
 3. Ensure Java SDK 17 or later is configured.
 4. Place any animal data files (e.g., `animals.csv`) in the project directory.
 5. Run `WATSSwingApp.java` to launch the application.
@@ -49,14 +49,6 @@ The Wildlife Animal Tracking System (WATS) is a JFC/Swing-based Java GUI applica
   - Age and Weight must be non-negative.
   - Valid Health Status: Healthy, Injured, Sick or Unknown
 
-## 📄 CSV Format
-* The CSV file should contain the following columns in this order:
-
-```
-ID,Species,Name,Age,Gender,Weight,HealthStatus
-101,Lion,Simba,5,Male,190.5,Healthy
-...
-```
 
 ## 👤 Author
 
