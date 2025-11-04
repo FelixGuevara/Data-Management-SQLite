@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!sqlite-jdbc-jar/*.jar
 *.war
 *.nar
 *.ear
