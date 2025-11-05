@@ -53,7 +53,7 @@ The Wildlife Animal Tracking System (WATS) is a JFC/Swing-based Java GUI applica
 ## 👤 Author
 
 **Felix Guevara**  
-Date: October 26, 2025  
+Date: November 4, 2025  
 Course: [CEN-3024C-13950]
 
 ---
