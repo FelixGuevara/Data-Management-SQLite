@@ -37,8 +37,7 @@ The Wildlife Animal Tracking System (WATS) is a JFC/Swing-based Java GUI applica
    - `DecimalDocumentFilter.java`
    - `DatabaseFileChooser.java`
 3. Ensure Java SDK 17 or later is configured.
-4. Place any animal data files (e.g., `animals.csv`) in the project directory.
-5. Run `WATSSwingApp.java` to launch the application.
+4. Run `WATSSwingApp.java` to launch the application.
 
 ## ⚙ Usage
 
