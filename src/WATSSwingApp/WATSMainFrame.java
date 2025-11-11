@@ -1,7 +1,7 @@
 /**
  * Author: Felix Guevara
  * Course: [CEN-3024C-13950]
- * Date: October 25, 2025,
+ * Date: November 10, 2025,
  * Class: WATSMainFrame.java
  *
  * This is the main JFrame of the Wildlife Animal Tracking System program.
@@ -20,30 +20,42 @@ import java.awt.*;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * The main JFrame for the Wildlife Animal Tracking System (WATS) application.
+ * <p>
+ * This class encapsulates the primary graphical user interface (GUI) frame for the application.
+ * It sets up the main window, integrates the {@link DatabaseManager} instance, and provides
+ * access to all CRUD operations and analytics features. The frame includes a sidebar for
+ * navigation and a central panel for displaying animal records in a table.
+ * </p>
+ *
+ * @author Felix Guevara
+ * @version 1.0
+ * @since 2025-11-10
+ */
+
 public class WATSMainFrame extends JFrame {
-    /**
-     * Create an instance of DatabaseManager to manage animal records
-     */
+
+
+    /** Manages database operations for animal records. */
     private DatabaseManager dbManager;
-    /**
-     * Create an instance of JTable for Animal records
-     */
+
+    /** Table component for displaying animal records. */
     private JTable animalTable;
-    /**
-     * Create an instance of DefaultTableModel to define table columns
-     */
+
+    /** Table model defining columns and data for the animal table. */
     private DefaultTableModel tableModel;
-    /**
-     * Create an instance of JPanel for the main content panel
-     */
+
+    /** Main content panel for the application. */
     private JPanel mainPanel;
 
+
+
     /**
-     * Method: WATSMainFrame
-     * Purpose: Constructs the main application frame for the Wildlife Animal Tracking System (WATS),
-     * integrating the private DatabaseManager instance to enable data operations and analytics.
-     * Arguments: none
-     * Return: none
+     * Constructs the main application frame for the Wildlife Animal Tracking System (WATS).
+     * <p>
+     * Initializes the frame properties and calls {@link #initUI()} to set up the user interface.
+     * </p>
      */
     public WATSMainFrame() {
         setTitle("Wildlife Animal Tracking System (WATS)");
@@ -54,6 +66,15 @@ public class WATSMainFrame extends JFrame {
         initUI();
     }
 
+
+    /**
+     * Initializes the user interface components for the main frame.
+     * <p>
+     * This method sets up the menu bar, sidebar with navigation buttons, and the main content panel
+     * containing the animal records table. It also attaches event listeners to buttons for CRUD
+     * operations and analytics.
+     * </p>
+     */
     private void initUI() {
 
         // Create menu bar
@@ -107,11 +128,15 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: setupAnimalTable
-     * Purpose: Initializes the animal table with predefined column headers and sets up
-     * a read-only table model. Applies center alignment to all columns for better readability,
-     * Arguments: none
-     * Return: void
+     * Initializes the animal table with predefined column headers and a read-only table model.
+     * <p>
+     * This method sets up the {@link JTable} for displaying animal records, applies center alignment
+     * to all columns for better readability, and embeds the table within a scroll pane. It also
+     * invokes {@link #setupContextMenu()} to configure the table's context menu.
+     * </p>
+     *
+     * <p>The table uses a custom {@link DefaultTableModel} that overrides
+     * {@link DefaultTableModel#isCellEditable(int, int)} to make all cells read-only.</p>
      */
     private void setupAnimalTable() {
         String[] columnNames = {
@@ -144,12 +169,16 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: setupContextMenu
-     * Purpose: Configures the context menu for the animal table, providing options
-     * to update or delete selected animal records. Each menu item is linked to its
-     * respective action handler.
-     * Arguments: none
-     * Return: void
+     * Configures the context menu for the animal table.
+     * <p>
+     * This method creates a {@link JPopupMenu} with options to update or delete selected animal records.
+     * Each menu item is linked to its respective action handler:
+     * <ul>
+     *     <li><b>Update Animal</b> → {@link #openEditAnimalDialog()}</li>
+     *     <li><b>Delete Animal</b> → {@link #handleDeleteAnimal()}</li>
+     * </ul>
+     * <p>The context menu is then attached to the {@link JTable} component.</p>
+     *
      */
     private void setupContextMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
@@ -167,12 +196,14 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: promptForDatabase
-     * Purpose: Opens a file chooser dialog to allow the user to select a SQLite file containing animal data.
-     * The selected file is processed by the DatabaseManager to import records. Displays a detailed report
-     * of any errors or warnings encountered during import, and refreshes the animal table upon completion.
-     * Arguments: none
-     * Return: void
+     * Opens a file chooser dialog to allow the user to select a SQLite database file containing animal data.
+     * <p>
+     * This method uses {@link DatabaseFileChooser} to prompt the user for a database file. If a valid file
+     * is selected, a new {@link DatabaseManager} instance is created with the chosen file path, and the
+     * animal table is refreshed to display the imported records.
+     * </p>
+     *
+     * <p>Displays an error message if no file is selected and continues without database support.</p>
      */
     public void promptForDatabase() {
         DatabaseFileChooser chooser = new DatabaseFileChooser();
@@ -185,11 +216,13 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: refreshAnimalTable
-     * Purpose: Clears the current table data and repopulates it with the latest list
-     * of wild animals retrieved from the DatabaseManager.
-     * Arguments: none
-     * Return: void
+     * Refreshes the animal table by clearing existing rows and repopulating it with the latest data
+     * retrieved from the database.
+     * <p>
+     * This method calls {@link DatabaseManager#getAllWildAnimalRecords()} to fetch all animal records
+     * and updates the {@link JTable} with the new data. Each record is displayed in a row with columns
+     * for Tag ID, Species, Name, Age, Gender, Weight, and Health Status.
+     * </p>
      */
     public void refreshAnimalTable() {
 
@@ -211,12 +244,14 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: openEditAnimalDialog
-     * Purpose: Opens a dialog window to update the details of a selected animal record.
-     * Validates that the table contains data and that a row is selected before launching
-     * the UpdateAnimalDialog. Refreshes the table after the dialog is closed.
-     * Arguments: none
-     * Return: void
+     * Opens a dialog window to update the details of a selected animal record.
+     * <p>
+     * This method validates that the table contains data and that a row is selected before launching
+     * the {@link UpdateAnimalDialog}. If no records exist or no row is selected, an appropriate warning
+     * message is displayed. After the dialog is closed, the animal table is refreshed to reflect any changes.
+     * </p>
+     *
+     * <p>The selected animal's Tag ID is retrieved from the first column of the selected row.</p>
      */
     private void openEditAnimalDialog() {
 
@@ -239,12 +274,15 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: handleDeleteAnimal
-     * Purpose: Handles the deletion of a selected animal record from the table.
-     * Prompts the user for confirmation before proceeding with the deletion using
-     * the DatabaseManager. Displays appropriate messages based on the outcome or any errors.
-     * Arguments: none
-     * Return: void
+     * Handles the deletion of a selected animal record from the table.
+     * <p>
+     * This method validates that the table contains data and that a row is selected before proceeding.
+     * It prompts the user for confirmation and, if confirmed, calls {@link DatabaseManager#deleteWildAnimal(int)}
+     * to delete the record. Displays success or error messages based on the outcome and refreshes the table
+     * after a successful deletion.
+     * </p>
+     *
+     * <p> The selected animal's Tag ID is retrieved from the first column of the selected row. </p>
      */
     private void handleDeleteAnimal() {
 
@@ -283,12 +321,17 @@ public class WATSMainFrame extends JFrame {
     }
 
     /**
-     * Method: showAverageWeightDialog
-     * Purpose: Prompts the user to enter a species name and calculates the average weight
-     * of all animals belonging to that species using the DatabaseManager. Displays the result
-     * in a dialog box or shows an error message if the calculation fails.
-     * Arguments: none
-     * Return: void
+     * Prompts the user to enter a species name and calculates the average weight of all animals
+     * belonging to that species using the database.
+     * <p>
+     * This method displays an input dialog for the user to enter a species name. It then executes
+     * an SQL query to compute the average weight of animals matching the specified species. The result
+     * is displayed in an information dialog. If no animals are found or an error occurs, an appropriate
+     * message is shown.
+     * </p>
+     *
+     * <p> Uses {@link DatabaseManager#connect()} to establish a connection and performs the
+     * calculation using {@link PreparedStatement} and {@link ResultSet}.</p>
      */
     private void showAverageWeightDialog() {
         String species = JOptionPane.showInputDialog(this, "Enter species name:", "Average Weight", JOptionPane.QUESTION_MESSAGE);

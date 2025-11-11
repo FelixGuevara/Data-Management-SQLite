@@ -1,7 +1,7 @@
 /**
  * Author: Felix Guevara
  * Course: [CEN-3024C-13950]
- * Date: October 31, 2025,
+ * Date: November 10, 2025,
  * Class: DatabaseManager.java
  *
  * This is a utility class responsible for managing connections to the SQLite database
@@ -17,23 +17,47 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A utility class responsible for managing SQLite database operations for the Wildlife Animal Tracking System (WATS).
+ * <p>
+ * This class encapsulates the database file path and provides methods to establish a connection and perform
+ * CRUD operations on the {@code WildAnimals} table. It promotes modularity, reusability, and simplifies
+ * database access throughout the application.
+ * </p>
+ *
+ * @author Felix Guevara
+ * @version 1.0
+ * @since 2025-11-10
+ */
 public class DatabaseManager {
+
+    /** The file path of the SQLite database. */
     private final String dbPath;
 
+    /**
+     * Constructs a new {@code DatabaseManager} instance.
+     *
+     * @param dbPath the file path of the SQLite database
+     */
     public DatabaseManager(String dbPath) {
         this.dbPath = dbPath;
     }
 
+    /**
+     * Establishes a connection to the SQLite database.
+     *
+     * @return a {@link Connection} object for interacting with the database
+     * @throws SQLException if a database access error occurs
+     */
     public Connection connect() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
     }
 
     /**
-     * Method: getAllWildAnimalRecords
-     * Purpose: Retrieves all wild animal records from the WildAnimals table in the database.
-     * Arguments: None
-     * Return: A List of WildAnimal objects representing all records in the database.
-     *         If no records exist, returns an empty list.
+     * Retrieves all wild animal records from the {@code WildAnimals} table.
+     *
+     * @return a {@link List} of {@link WildAnimal} objects representing all records in the database;
+     *         returns an empty list if no records exist
      */
     public List<WildAnimal> getAllWildAnimalRecords() {
         String sql = "SELECT * FROM WildAnimals";
@@ -55,19 +79,19 @@ public class DatabaseManager {
                 );
                 animals.add(animal);
             }
-        }
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return animals;
     }
 
     /**
-     * Method: getWildAnimalById
-     * Purpose: Gets an animal record by Tag ID.
-     * Arguments: int id - the tag id for the selected record
-     * Return: WildAnimal instance if success, null object otherwise
+     * Retrieves a wild animal record by its Tag ID.
+     *
+     * @param id the Tag ID of the animal
+     * @return a {@link WildAnimal} instance if found; {@code null} otherwise
      */
     public WildAnimal getWildAnimalById(int id) {
         String sql = "SELECT * FROM WildAnimals WHERE id = ?";
@@ -90,20 +114,19 @@ public class DatabaseManager {
                         rs.getString("healthStatus")
                 );
             }
-        }
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        // null if not found
         return animal;
     }
 
     /**
-     * Method: insertWildAnimal
-     * Purpose: Inserts a new animal record.
-     * Arguments: WildAnimal anima - the animal record to be added
-     * Return: boolean - true if success, false otherwise
+     * Inserts a new wild animal record into the database.
+     *
+     * @param animal the {@link WildAnimal} object to insert
+     * @return {@code true} if the insertion was successful; {@code false} otherwise
      */
     public boolean insertWildAnimal(WildAnimal animal) {
         String sql = "INSERT INTO WildAnimals (id, species, name, age, gender, weight, healthStatus) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -120,19 +143,19 @@ public class DatabaseManager {
             stmt.setString(7, animal.getHealthStatus());
 
             stmt.executeUpdate();
-            return true; // success
-        }
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return false; // failure
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 
     /**
-     * Method: updateWildAnimal
-     * Purpose: Updates an existing animal's details by Tag ID.
-     * Arguments: WildAnimal animal - animal record to be updated
-     * Return: boolean - true if success, false otherwise
+     * Updates an existing wild animal record in the database.
+     *
+     * @param animal the {@link WildAnimal} object containing updated details
+     * @return {@code true} if the update was successful; {@code false} otherwise
      */
     public boolean updateWildAnimal(WildAnimal animal) {
         String sql = "UPDATE WildAnimals SET species = ?, name = ?, age = ?, gender = ?, weight = ?, healthStatus = ? WHERE id = ?";
@@ -149,21 +172,19 @@ public class DatabaseManager {
             stmt.setInt(7, animal.getId());
 
             int affectedRows = stmt.executeUpdate();
-
-            // true if update succeeded
             return affectedRows > 0;
-        }
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return false; // failure
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 
     /**
-     * Method: deleteWildAnimal
-     * Purpose: Deletes an animal by Tag ID.
-     * Arguments: int id - the tag id for the record to be deleted
-     * Return: boolean - true if success, false otherwise
+     * Deletes a wild animal record from the database by its Tag ID.
+     *
+     * @param id the Tag ID of the animal to delete
+     * @return {@code true} if the deletion was successful; {@code false} otherwise
      */
     public boolean deleteWildAnimal(int id) {
         String sql = "DELETE FROM WildAnimals WHERE id = ?";
@@ -173,13 +194,11 @@ public class DatabaseManager {
 
             stmt.setInt(1, id);
             int affectedRows = stmt.executeUpdate();
-
-            // true if record deleted
             return affectedRows > 0;
-        }
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return false; // failure
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 }
