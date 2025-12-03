@@ -232,8 +232,8 @@ public class WATSMainFrame extends JFrame {
         for (WildAnimal animal : animals) {
             Object[] row = {
                     animal.getId(),
-                    animal.getSpecies(),
                     animal.getName(),
+                    animal.getSpecies(),
                     animal.getAge(),
                     animal.getGender(),
                     animal.getWeight(),
